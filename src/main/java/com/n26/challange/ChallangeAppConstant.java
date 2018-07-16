@@ -9,7 +9,8 @@ package com.n26.challange;
  */
 public class ChallangeAppConstant {
 
-	public static final long TRANSACTION_EXPIRED_DURATION = 30000;
+	public static final long TRANSACTION_EXPIRED_DURATION = 60;
+	public static final int SCALE = 7;
 
 	protected ChallangeAppConstant() {
 		// for sonarlint

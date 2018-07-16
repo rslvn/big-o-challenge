@@ -4,23 +4,25 @@
 package com.n26.challange.model;
 
 /**
+ * Model for Statistics objects
+ * 
  * @author resulav
  *
  */
 public class Statistics {
-	
-	private final double sum;
-	private final double avg;
-	private final double max;
-	private final double min;
-	private final long count;
+
+	private double sum;
+	private double avg;
+	private double max;
+	private double min;
+	private long count;
 
 	private Statistics(Builder builder) {
-		sum = builder.sum;
-		avg = builder.avg;
-		max = builder.max;
-		min = builder.min;
-		count = builder.count;
+		setSum(builder.sum);
+		setAvg(builder.avg);
+		setMax(builder.max);
+		setMin(builder.min);
+		setCount(builder.count);
 	}
 
 	public static Builder newBuilder() {
@@ -35,10 +37,24 @@ public class Statistics {
 	}
 
 	/**
+	 * @param sum the sum to set
+	 */
+	public void setSum(double sum) {
+		this.sum = sum;
+	}
+
+	/**
 	 * @return the avg
 	 */
 	public double getAvg() {
 		return avg;
+	}
+
+	/**
+	 * @param avg the avg to set
+	 */
+	public void setAvg(double avg) {
+		this.avg = avg;
 	}
 
 	/**
@@ -49,6 +65,13 @@ public class Statistics {
 	}
 
 	/**
+	 * @param max the max to set
+	 */
+	public void setMax(double max) {
+		this.max = max;
+	}
+
+	/**
 	 * @return the min
 	 */
 	public double getMin() {
@@ -56,10 +79,24 @@ public class Statistics {
 	}
 
 	/**
+	 * @param min the min to set
+	 */
+	public void setMin(double min) {
+		this.min = min;
+	}
+
+	/**
 	 * @return the count
 	 */
 	public long getCount() {
 		return count;
+	}
+
+	/**
+	 * @param count the count to set
+	 */
+	public void setCount(long count) {
+		this.count = count;
 	}
 
 	/**
@@ -76,8 +113,7 @@ public class Statistics {
 		}
 
 		/**
-		 * Sets the {@code sum} and returns a reference to this Builder so that the
-		 * methods can be chained together.
+		 * Sets the {@code sum} and returns a reference to this Builder so that the methods can be chained together.
 		 *
 		 * @param sum the {@code sum} to set
 		 * @return a reference to this Builder
@@ -88,8 +124,7 @@ public class Statistics {
 		}
 
 		/**
-		 * Sets the {@code avg} and returns a reference to this Builder so that the
-		 * methods can be chained together.
+		 * Sets the {@code avg} and returns a reference to this Builder so that the methods can be chained together.
 		 *
 		 * @param avg the {@code avg} to set
 		 * @return a reference to this Builder
@@ -100,8 +135,7 @@ public class Statistics {
 		}
 
 		/**
-		 * Sets the {@code max} and returns a reference to this Builder so that the
-		 * methods can be chained together.
+		 * Sets the {@code max} and returns a reference to this Builder so that the methods can be chained together.
 		 *
 		 * @param max the {@code max} to set
 		 * @return a reference to this Builder
@@ -112,8 +146,7 @@ public class Statistics {
 		}
 
 		/**
-		 * Sets the {@code min} and returns a reference to this Builder so that the
-		 * methods can be chained together.
+		 * Sets the {@code min} and returns a reference to this Builder so that the methods can be chained together.
 		 *
 		 * @param min the {@code min} to set
 		 * @return a reference to this Builder
@@ -124,8 +157,7 @@ public class Statistics {
 		}
 
 		/**
-		 * Sets the {@code count} and returns a reference to this Builder so that the
-		 * methods can be chained together.
+		 * Sets the {@code count} and returns a reference to this Builder so that the methods can be chained together.
 		 *
 		 * @param count the {@code count} to set
 		 * @return a reference to this Builder
@@ -138,8 +170,7 @@ public class Statistics {
 		/**
 		 * Returns a {@code Statistics} built from the parameters previously set.
 		 *
-		 * @return a {@code Statistics} built with parameters of this
-		 *         {@code Statistics.Builder}
+		 * @return a {@code Statistics} built with parameters of this {@code Statistics.Builder}
 		 */
 		public Statistics build() {
 			return new Statistics(this);

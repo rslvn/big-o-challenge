@@ -4,6 +4,8 @@
 package com.n26.challange.model;
 
 /**
+ * Model for Transaction objects
+ *
  * @author resulav
  *
  */

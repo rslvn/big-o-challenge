@@ -3,14 +3,14 @@
  */
 package com.n26.challange.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.n26.challange.ChallangeAppConstant;
 import com.n26.challange.model.Statistics;
-import com.n26.challange.model.Transaction;
+import com.n26.challange.util.StatisticsUtil;
 
 /**
  * @author resulav
@@ -28,46 +28,75 @@ import com.n26.challange.model.Transaction;
 @Service
 public class TransactionService {
 	private static final Logger LOG = LoggerFactory.getLogger(TransactionService.class);
-	private static final Map<Long, List<Transaction>> transactionMap = new ConcurrentHashMap<>();
+
+	private static final Map<Long, Statistics> statisticsMap = new ConcurrentHashMap<>();
+	private static final Map<Long, Statistics> outOfRangeStatisticsMap = new ConcurrentHashMap<>();
+	private static Statistics latest = Statistics.newBuilder().build();
 
 	/**
-	 * @param transaction
+	 * adds new transactions
+	 * 
+	 * @param amount    transaction amount
+	 * @param timestamp transaction timestamp as UTC epoch seconds
 	 */
-	public void addTransaction(Transaction transaction) {
-		transactionMap.computeIfAbsent(transaction.getTimestamp(), key -> new ArrayList<>()).add(transaction);
-		LOG.info("Size of cache: {}", transactionMap.size());
+	public void addStatistics(BigDecimal amount, long timestamp) {
+		StatisticsUtil.addStatistics(latest, amount);
+		Statistics statistics = statisticsMap.computeIfAbsent(timestamp,
+				key -> Statistics.newBuilder().build());
+		StatisticsUtil.addStatistics(statistics, amount);
 	}
 
 	/**
+	 * stores transactions whose timestamp bigger than curent timestamp
+	 * 
+	 * @param amount    amount transaction amount
+	 * @param timestamp transaction timestamp as UTC epoch seconds
+	 */
+	public void addOutOfRangeStatistics(BigDecimal amount, long timestamp) {
+		Statistics statistics = outOfRangeStatisticsMap.computeIfAbsent(timestamp,
+				key -> Statistics.newBuilder().build());
+		StatisticsUtil.addStatistics(statistics, amount);
+	}
+
+	/**
+	 * returns current statistics
+	 * 
 	 * @return
 	 */
 	public Statistics getStatistics() {
-		long before30seconds = System.currentTimeMillis() - ChallangeAppConstant.TRANSACTION_EXPIRED_DURATION;
-		LOG.info("Size: {}, ts: {}", transactionMap.size(), before30seconds);
-		Map<Long, List<Transaction>> tmpMap = new HashMap<>(transactionMap);
-
-		List<Double> amountList = tmpMap.entrySet().stream().filter(e -> e.getKey().longValue() >= before30seconds)
-				.map(e -> e.getValue()).flatMapToDouble(l -> l.stream().mapToDouble(t -> t.getAmount())).boxed()
-				.collect(Collectors.toList());
-
-		LOG.info("amounts: {}", amountList.size());
-
-		Supplier<DoubleStream> doubleStreamSupplier = () -> amountList.parallelStream().mapToDouble(d -> d);
-
-		return Statistics.newBuilder().withAvg(doubleStreamSupplier.get().average().orElse(0.0))
-				.withCount(amountList.size()).withMax(doubleStreamSupplier.get().max().orElse(0.0))
-				.withMin(doubleStreamSupplier.get().min().orElse(0.0)).withSum(doubleStreamSupplier.get().sum())
-				.build();
+		return StatisticsUtil.cloneStatistics(latest);
 	}
 
 	/**
+	 * The periodic job to remove old transaction records
 	 * 
 	 */
-	@Scheduled(fixedRate = 5000)
-	private void removeOlds() {
-		long before30seconds = System.currentTimeMillis() - ChallangeAppConstant.TRANSACTION_EXPIRED_DURATION;
-		new HashMap<>(transactionMap).entrySet().stream().filter(e -> e.getKey().longValue() < before30seconds)
-				.forEach(e -> transactionMap.remove(e.getKey()));
-	}
+	@Scheduled(cron = "* * * * * ?")
+	private void removeOldRecords() {
+		long currentEpoch = Instant.now(Clock.systemUTC()).getEpochSecond();
 
+		// add current time statistics If exist in out of range map
+		Statistics uncalculated = outOfRangeStatisticsMap.remove(currentEpoch);
+		if (uncalculated != null) {
+			StatisticsUtil.addStatistics(latest, uncalculated);
+			statisticsMap.put(currentEpoch, uncalculated);
+		}
+
+		long before60seconds = currentEpoch - ChallangeAppConstant.TRANSACTION_EXPIRED_DURATION;
+		Statistics statistics = statisticsMap.remove(before60seconds);
+		if (statistics == null) {
+			return;
+		}
+
+		LOG.info("Triggerred at {} for {}", currentEpoch, before60seconds);
+
+		List<Double> maxMinAmountList = statisticsMap.entrySet().parallelStream().map(e -> e.getValue())
+				.flatMapToDouble(s -> Arrays.asList(s.getMin(), s.getMax()).parallelStream().mapToDouble(t -> t))
+				.boxed().collect(Collectors.toList());
+
+		StatisticsUtil.remove(latest, statistics, maxMinAmountList);
+
+		LOG.info("Size: {}, count: {}, avg: {}, sum: {}, max: {}, min: {}", statisticsMap.size(), latest.getCount(),
+				latest.getAvg(), latest.getSum(), latest.getMax(), latest.getMin());
+	}
 }

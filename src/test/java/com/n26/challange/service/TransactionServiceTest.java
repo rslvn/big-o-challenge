@@ -3,14 +3,22 @@
  */
 package com.n26.challange.service;
 
+import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.n26.challange.model.Transaction;
+import com.n26.challange.model.Statistics;
 
 /**
  * @author resulav
@@ -19,22 +27,19 @@ import com.n26.challange.model.Transaction;
 @RunWith(SpringRunner.class)
 public class TransactionServiceTest {
 
+	@Mock
+	private ScheduledExecutorService scheduledExecutor;
+
 	@InjectMocks
 	private TransactionService transactionService;
 
-	@Test
-	public void testRemoveOlds() throws InterruptedException {
-		Transaction transaction = new Transaction();
-		transaction.setAmount(2.1);
-		transaction.setTimestamp(System.currentTimeMillis() - 26000);
-
-		//
-		transactionService.addTransaction(transaction);
-		System.out.println(transactionService.getStatistics().getCount());
-
-		TimeUnit.SECONDS.sleep(5);
-		System.out.println(transactionService.getStatistics().getCount());
-		TimeUnit.SECONDS.sleep(5);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 	}
 
+	@Test
+	public void testExecutor() throws InterruptedException {
+
+	}
 }
