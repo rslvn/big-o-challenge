@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -31,7 +32,10 @@ public class TransactionService {
 
 	private static final Map<Long, Statistics> statisticsMap = new ConcurrentHashMap<>();
 	private static final Map<Long, Statistics> outOfRangeStatisticsMap = new ConcurrentHashMap<>();
+
 	private static Statistics latest = Statistics.newBuilder().build();
+
+	private ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * adds new transactions
@@ -40,9 +44,14 @@ public class TransactionService {
 	 * @param timestamp transaction timestamp as UTC epoch seconds
 	 */
 	public void addStatistics(BigDecimal amount, long timestamp) {
-		StatisticsUtil.addStatistics(latest, amount);
-		Statistics statistics = statisticsMap.computeIfAbsent(timestamp,
-				key -> Statistics.newBuilder().build());
+		lock.lock();
+		try {
+			StatisticsUtil.addStatistics(latest, amount);
+		} finally {
+			lock.unlock();
+		}
+
+		Statistics statistics = statisticsMap.computeIfAbsent(timestamp, key -> Statistics.newBuilder().build());
 		StatisticsUtil.addStatistics(statistics, amount);
 	}
 
@@ -64,7 +73,12 @@ public class TransactionService {
 	 * @return
 	 */
 	public Statistics getStatistics() {
-		return StatisticsUtil.cloneStatistics(latest);
+		lock.lock();
+		try {
+			return StatisticsUtil.cloneStatistics(latest);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	/**
@@ -78,7 +92,12 @@ public class TransactionService {
 		// add current time statistics If exist in out of range map
 		Statistics uncalculated = outOfRangeStatisticsMap.remove(currentEpoch);
 		if (uncalculated != null) {
-			StatisticsUtil.addStatistics(latest, uncalculated);
+			lock.lock();
+			try {
+				StatisticsUtil.addStatistics(latest, uncalculated);
+			} finally {
+				lock.unlock();
+			}
 			statisticsMap.put(currentEpoch, uncalculated);
 		}
 
@@ -94,7 +113,12 @@ public class TransactionService {
 				.flatMapToDouble(s -> Arrays.asList(s.getMin(), s.getMax()).parallelStream().mapToDouble(t -> t))
 				.boxed().collect(Collectors.toList());
 
-		StatisticsUtil.remove(latest, statistics, maxMinAmountList);
+		lock.lock();
+		try {
+			StatisticsUtil.remove(latest, statistics, maxMinAmountList);
+		} finally {
+			lock.unlock();
+		}
 
 		LOG.info("Size: {}, count: {}, avg: {}, sum: {}, max: {}, min: {}", statisticsMap.size(), latest.getCount(),
 				latest.getAvg(), latest.getSum(), latest.getMax(), latest.getMin());
