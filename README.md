@@ -19,7 +19,7 @@ database).
 - Endpoints have to execute in constant time and memory (O(1))
 
 ## Build and Execute
-The command triggers compiling code, executing unit tests, creating docker image and run a docker container.
+
 ```
 mvn clean install
 mvn spring-boot:run 
