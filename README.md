@@ -1,7 +1,7 @@
 # challange
 
 [![Build Status](http://circleci-badges-max.herokuapp.com/img/rslvn/challange/master?token=a184b3b3ba22854b647a8ba2af392724ef2eace4)](https://circleci.com/gh/rslvn/challange/tree/master)
-
+[![Coverage Status](https://coveralls.io/repos/github/rslvn/challange/badge.svg)](https://coveralls.io/github/rslvn/challange)
 ## Goal
 
 The main use case for our API is to calculate realtime statistic from the last 60 seconds. There will be two APIs, one of them is called every time a transaction is made. It is also the sole input of this rest API. The other one returns the statistic based of the transactions of the last 60 seconds.
