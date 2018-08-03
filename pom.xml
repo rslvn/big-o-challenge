@@ -58,8 +58,31 @@
 				<version>4.3.0</version>
 				<configuration>
 					<repoToken>I2TLBnPoGdLmksnwB9cPiWNfSAbedUwEb</repoToken>
+                    <coberturaReports>${project.reporting.outputDirectory}/cobertura/coverage.xml</coberturaReports>
+                    <sagaReports>${project.build.directory}/saga-coverage/total-coverage.xml</sagaReports>
+                    <jacocoReports>${project.reporting.outputDirectory}/jacoco/jacoco.xml</jacocoReports>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
+
+                <configuration>
+                    <check></check>
+                    <format>xml</format>
+                    <maxmem>256m</maxmem>
+                    <!-- aggregated reports for multi-module projects -->
+                    <aggregate>true</aggregate>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -72,6 +95,27 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+             <plugin>
+                <groupId>com.github.timurstrekalov</groupId>
+                <artifactId>saga-maven-plugin</artifactId>
+                <version>1.5.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>coverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <baseDir>http://localhost:9090</baseDir>
+                    <outputDir>${project.build.directory}/saga-coverage</outputDir>
+                    <noInstrumentPatterns>
+                        <pattern>.*/spec/.*</pattern>
+                        <pattern>.*/classpath/.*</pattern>
+                        <pattern>.*/webjars/.*</pattern>
+                    </noInstrumentPatterns>
+                </configuration>
             </plugin>
 		</plugins>
 	</build>
