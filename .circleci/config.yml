@@ -41,4 +41,4 @@ jobs:
       - run: mvn integration-test
 
       # coverage report
-      - run: mvn clean test saga:coverage jacoco:report cobertura:cobertura-integration-test coveralls:report
+      - run: mvn clean test jacoco:report coveralls:report
