@@ -85,7 +85,7 @@ public class ChallageControllerTest {
 
 	@Test
 	public void testAddTransactionNoTransaction() throws Exception {
-		Transaction transaction = createTransaction(1.0, 0l);
+		Transaction transaction = createTransaction(1.0, 0);
 
 		mockMvc.perform(post(ChallangeController.PATH_TRANSACTION).contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(transaction)))
