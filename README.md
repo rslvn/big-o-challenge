@@ -1,4 +1,4 @@
-# challange
+# challenge
 
 [![Build Status](http://circleci-badges-max.herokuapp.com/img/rslvn/challange/master?token=a184b3b3ba22854b647a8ba2af392724ef2eace4)](https://circleci.com/gh/rslvn/challange/tree/master)
 [![Build Status](https://travis-ci.com/rslvn/challange.svg?branch=master)](https://travis-ci.com/rslvn/challange)
