@@ -40,5 +40,17 @@ jobs:
       # run tests!
       - run: mvn integration-test
 
+      # jacoco report
+      - run: mvn clean test jacoco:report
+
       # coverage report
-      - run: mvn clean test jacoco:report coveralls:report
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          context: SonarCloud

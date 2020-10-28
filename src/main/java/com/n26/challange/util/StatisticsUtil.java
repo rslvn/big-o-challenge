@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.n26.challange.util;
 
@@ -24,7 +24,7 @@ public class StatisticsUtil {
 
 	/**
 	 * clones a Statistics object
-	 * 
+	 *
 	 * @param statistics object to clone
 	 * @return a new Statistics object
 	 */
@@ -35,7 +35,7 @@ public class StatisticsUtil {
 
 	/**
 	 * adds the amount to a Statistics object
-	 * 
+	 *
 	 * @param to     object to add
 	 * @param amount the new amount
 	 */
@@ -59,7 +59,7 @@ public class StatisticsUtil {
 
 	/**
 	 * adds the amount to a Statistics object
-	 * 
+	 *
 	 * @param to     object to add
 	 * @param amount the new amount
 	 */
@@ -76,13 +76,13 @@ public class StatisticsUtil {
 			to.setSum(sum.doubleValue());
 			to.setAvg(sum.divide(BigDecimal.valueOf(to.getCount()), RoundingMode.HALF_UP).doubleValue());
 			to.setMin(Math.min(to.getMin(), from.getMin()));
-			to.setMax(Math.max(to.getMax(), to.getMax()));
+			to.setMax(Math.max(to.getMax(), from.getMax()));
 		}
 	}
 
 	/**
 	 * removes expired statistics from total statistics
-	 * 
+	 *
 	 * @param from             object to remove
 	 * @param to               removing object
 	 * @param maxMinAmountList min and max amount values of all seconds

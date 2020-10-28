@@ -1,7 +1,10 @@
 # challenge
 
-[![Build Status](http://circleci-badges-max.herokuapp.com/img/rslvn/challange/master?token=a184b3b3ba22854b647a8ba2af392724ef2eace4)](https://circleci.com/gh/rslvn/challange/tree/master)
-[![Build Status](https://travis-ci.com/rslvn/challange.svg?branch=master)](https://travis-ci.com/rslvn/challange)
+[![CircleCI](https://circleci.com/gh/rslvn/bbig-o-challenge.svg?style=svg)](https://circleci.com/gh/rslvn/bbig-o-challenge)
+[![Coverage Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=coverage)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
+[![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=ncloc)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
+[![Technical Debit](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
+
 
 
 [![Coverage Status](https://coveralls.io/repos/github/rslvn/challange/badge.svg)](https://coveralls.io/github/rslvn/challange)
