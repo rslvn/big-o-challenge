@@ -9,7 +9,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>challange</name>
+	<name>big-o-challenge</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
