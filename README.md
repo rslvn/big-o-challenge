@@ -1,9 +1,9 @@
 # challenge
 
-[![CircleCI](https://circleci.com/gh/rslvn/bbig-o-challenge.svg?style=svg)](https://circleci.com/gh/rslvn/bbig-o-challenge)
-[![Coverage Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=coverage)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
-[![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=ncloc)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
-[![Technical Debit](https://sonarcloud.io/api/project_badges/measure?project=rslvn_bbig-o-challenge&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rslvn_bbig-o-challenge)
+[![CircleCI](https://circleci.com/gh/rslvn/big-o-challenge.svg?style=svg)](https://circleci.com/gh/rslvn/big-o-challenge)
+[![Coverage Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_big-o-challenge&metric=coverage)](https://sonarcloud.io/dashboard?id=rslvn_big-o-challenge)
+[![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=rslvn_big-o-challenge&metric=ncloc)](https://sonarcloud.io/dashboard?id=rslvn_big-o-challenge)
+[![Technical Debit](https://sonarcloud.io/api/project_badges/measure?project=rslvn_big-o-challenge&metric=sqale_index)](https://sonarcloud.io/dashboard?id=rslvn_big-o-challenge)
 
 
 
